@@ -1,1 +1,2 @@
-export const selectGenres = (state) => state.genre.genres;
+export const selectGenres = (state, filter) => state.genre.genres;
+export const selectGenre = (state) => state.genre.selectedGenre;

@@ -1,15 +1,29 @@
-import React, { useState } from "react";
-import { useDispatch } from "react-redux";
-import { addGenre } from "../store/genres/slice";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { addGenre, editGenre } from "../store/genres/slice";
+import { selectGenre } from "../store/genres/selectors";
 
 const GenreForm = () => {
   const dispatch = useDispatch();
+  const selectedGenre = useSelector(selectGenre);
+
+  useEffect(() => {
+    if (selectedGenre) {
+      setName(selectedGenre);
+    }
+  }, [selectedGenre]);
+
   const [name, setName] = useState("");
 
   const onSubmit = () => {
     setName("");
-    dispatch(addGenre(name));
+    if (selectedGenre) {
+      dispatch(editGenre(name));
+    } else {
+      dispatch(addGenre(name));
+    }
   };
+
   return (
     <div>
       Genre Form
@@ -18,7 +32,7 @@ const GenreForm = () => {
         value={name}
         onChange={(e) => setName(e.target.value)}
       />
-      <button onClick={onSubmit}>Create</button>
+      <button onClick={onSubmit}>{selectedGenre ? "Edit" : "Create"}</button>
     </div>
   );
 };
